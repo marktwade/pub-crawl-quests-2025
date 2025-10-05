@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark's Pub Crawl Quests: Herhoes & Villains Edition</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }
+        h1 { text-align: center; color: #ff69b4; text-shadow: 0 0 10px #ff1493; }
+        .score { text-align: center; font-size: 2em; color: #00ff00; margin: 20px 0; }
+        ul { list-style: none; padding: 0; }
+        li { background: #333; margin: 10px 0; padding: 15px; border-radius: 10px; border-left: 5px solid #ff69b4; }
+        input[type="checkbox"] { transform: scale(1.5); margin-right: 10px; }
+        .points { float: right; color: #ffd700; font-weight: bold; }
+        @media (max-width: 600px) { body { padding: 10px; } li { padding: 10px; } }
+    </style>
+</head>
+<body>
+    <h1>🦸‍♀️ Super Herhoes & Slutty Villains: Quest Tracker! 🦹‍♂️</h1>
+    <div class="score">Total Points: <span id="totalScore">0</span> / 100</div>
+    <ul id="questList">
+        <!-- Quests will be populated by JS -->
+    </ul>
+    <p style="text-align: center; font-size: 0.8em; color: #ccc;">Snap proof pics/vids & share with @MarkTWade. Consent first, chaos always!</p>
+
+    <script>
+        const quests = [
+            { name: "Signature Sip Showdown", desc: "Craft (or order) a \"Hero's Power Potion\" or \"Villain's Venom Vortex\" cocktail at each bar—chug it with a dramatic flair pose.", points: 3 },
+            { name: "Shot of Seduction", desc: "Buy a mystery shot for a stranger, then whisper your character's \"evil plan\" (or heroic pickup line) in their ear.", points: 3 },
+            { name: "Cape Clash Kiss-Off", desc: "Lock lips with a fellow hero/villain for a 5-second smooch selfie—bonus points if it's a slow-mo villainous victory dip.", points: 3 },
+            { name: "Booze Bandit Heist", desc: "\"Steal\" a sip from a buddy's drink by distracting them with a sexy superhero shimmy—act shocked when caught!", points: 3 },
+            { name: "Flirt Fest", desc: "Flirt with the counterpart to your costume. If you’re a hero find a villain, and villains find a hero and tell them how amazing their character & costume is.", points: 3 },
+            { name: "Epic Entrance Extravaganza", desc: "Roar your character's battle cry while downing a drink—film the crowd's reaction for glory.", points: 3 },
+            { name: "Villain's Vixen Vortex", desc: "Give a playful lap dance (or grind tease) to a willing hero/villain, ending with a twirl and a toast to \"temporary truces.\"", points: 3 },
+            { name: "Heroic Hug Hijack", desc: "Wrap a villain/hero in a bear hug and force them to surrender—yell \"Defeated!\" for the photo op.", points: 3 },
+            { name: "Dance-Off Dominion", desc: "Challenge a rival to a 30-second dance battle—inspired by your character's moves (think Bat-dance or Catwoman crawl). Winner buys the loser's next round.", points: 3 },
+            { name: "Secret Sidekick Seduction", desc: "Team up with a friend as your \"sidekick\" at Jubes—create plot twists of how you will take over the world. Share it in a video.", points: 3 },
+            { name: "Potion Swap Shenanigans", desc: "Trade drinks mid-sip with a partner, guessing each other's \"super serum\" flavors.", points: 3 },
+            { name: "Thunder Thigh Tease", desc: "Flex your \"thunder thighs\" (or assets) in a villainous strut across the bar, collecting cheers (and optional tips) along the way.", points: 3 },
+            { name: "Alliance Assassin's Toast", desc: "Form a temporary hero-villain duo at any bar to clink glasses and plot a \"world domination\" (or save) toast—recite it dramatically for points.", points: 3 },
+            { name: "Costume Caress Caper", desc: "Blindly \"caress\" a mystery crawler's costume accessory (with permission).", points: 3 },
+            { name: "Belly Laugh Brewdown", desc: "Tell your raunchiest hero/villain joke to a fellow crawler—if they snort-laugh, you score extra cool points.", points: 2 },
+            { name: "Midnight Masquerade Mash", desc: "Slow-dance with a villain/hero, adding sexy spins and superhero whispers for extra steam.", points: 2 },
+            { name: "Rustic Rumble Rodeo", desc: "Arm-wrestle a fellow crawler—loser finishes their drink in heroic defeat.", points: 2 },
+            { name: "Final Frontier Flirt", desc: "End the crawl at Goodnight John Boys by serenading a group with a sexy, slurred rendition of your character's theme song—crowd votes on the encore shot.", points: 2 },
+            { name: "Power Pose Pyramid", desc: "Strike a power pose with mixed heroes and villains at any bar.", points: 2 },
+            { name: "Ultimate Union Unwind", desc: "Pair up (hero + villain) for a \"forbidden romance\" photo series across the crawl with a passionate (PG-13) embrace.", points: 2 },
+            { name: "Stranger's Secret Serum Swap", desc: "Approach a random pedestrian and coax them for a flirty photo op.", points: 2 },
+            { name: "Villainous Vibe Vibration", desc: "Grind/dance against a street lamp (or willing wall) like it's your arch-nemesis in a seductive standoff, with vigorous triumph.", points: 2 },
+            { name: "Alleyway Alliance Auction", desc: "Snatch a quick, steamy smooch from the opposite-side teammate.", points: 2 },
+            { name: "Cape Whirlpool Whirl", desc: "Twirl your costume piece like a hypnotic vortex to mesmerize a bystander.", points: 2 },
+            { name: "Naughty Nemesis Note", desc: "Scribble a sultry \"ransom note\" on a napkin (your enemy's weakness exposed), slip it into a fellow villain's/hero's pocket.", points: 2 },
+            { name: "Boozy Backflip Bluff", desc: "Pretend to \"unlock\" a superpower by attempting a bendy bow.", points: 2 },
+            { name: "Flirtatious Force Field Fail", desc: "Build an invisible \"force field\" around a crush by protecting them from any nearby villains/heroes—don’t let anyone touch them while you are protecting them.", points: 2 },
+            { name: "Punderful Power Play", desc: "Challenge a stranger to a rapid-fire verbal battle (hero vs. villain style)—loser poses in defeat.", points: 2 },
+            { name: "Shadowy Seduction Stalk", desc: "Stalk your \"prey\" (a playful crawler) through the crowd with villainous prowls and hero teases, culminating in a tickle attack.", points: 2 },
+            { name: "Telekinetic Tease Tumble", desc: "\"Mind-control\" a willing partner's drink to \"float\" toward you by pulling them with your telekinetic powers.", points: 2 },
+            { name: "Invisibility Intimacy Attack", desc: "Sneak up behind a buddy for a sneaky shoulder or ear nibble.", points: 2 },
+            { name: "Super Speed Seduction Sprint", desc: "Blitz a stranger with a whirlwind flirt (quick compliments, twirl, and dip). Bonus points if you can make them blush.", points: 2 },
+            { name: "Flight of Fancy Frolic", desc: "\"Soar\" by leaping into a piggyback flight with a fellow flyer, gliding through the crowd.", points: 2 },
+            { name: "Rogue Realm Rendezvous", desc: "Snap a steamy selfie straddling the line—half-hero, half-villain outfit mashup with a mismatched mate.", points: 2 },
+            { name: "Nemesis Nuzzle Snap", desc: "Lock eyes (and lips optional) with your sworn enemy in a tense \"truce\" close-up at arm's length, then shatter the peace with a playful shove—frame the fallout for dramatic flair.", points: 2 },
+            { name: "Ally Assembly Action Shot", desc: "Herd 4+ crawlers into a chaotic \"Avengers Assemble\" huddle (mix heroes and villains), yell a battle cry for the epic capture in a photo.", points: 2 },
+            { name: "Shadow Squad Selfie Storm", desc: "Round up 4+ shadowy figures (villains with villains, heroes with heroes) for a group glow-up.", points: 2 },
+            { name: "Kryptonite Karaoke Catastrophe", desc: "Belt a hero's battle cry (or villain's villainous laugh) in a hilariously off-key operatic wail.", points: 2 },
+            { name: "Evil Empire Capture", desc: "Corner a crawler in a spot where they cannot escape. You have captured your villain or hero.", points: 2 },
+            { name: "Betrayer's Betrothal Boast", desc: "Snag a sneaky selfie with a fellow hero/villain.", points: 2 },
+            { name: "Rival Realm Rendezvous Reel", desc: "Huddle with 2+ opposite-side characters for a \"fragile alliance\" group selfie, all blowing kisses at the lens.", points: 2 },
+            { name: "Seductive Side-Eye Showdown", desc: "Lock a sultry side-eye stare with your arch-nemesis in a close-cropped duo selfie.", points: 2 },
+            { name: "Outfit Odyssey for the 'Gram", desc: "Strike your fiercest hero/villain vogue in a solo selfie channeling full fabulousness—post it live with #SluttySuperSquad for viral valor points.", points: 2 }
+        ];
+
+        const questList = document.getElementById('questList');
+        const totalScoreEl = document.getElementById('totalScore');
+        let totalScore = 0;
+
+        quests.forEach((quest, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <label>
+                    <input type="checkbox" data-points="${quest.points}" onchange="updateScore(this)">
+                    <strong>${quest.name}</strong> (${quest.points} pts)
+                </label>
+                <div style="margin-top: 5px; font-size: 0.9em; color: #ccc;">${quest.desc}</div>
+            `;
+            questList.appendChild(li);
+        });
+
+        function updateScore(checkbox) {
+            const points = parseInt(checkbox.dataset.points);
+            if (checkbox.checked) {
+                totalScore += points;
+            } else {
+                totalScore -= points;
+            }
+            totalScoreEl.textContent = totalScore;
+        }
+    </script>
+</body>
+</html>
